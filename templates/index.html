@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ATX</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="container">
+
+    <!-- ============ HOME ============ -->
+    <section id="view-home" class="view active">
+      <header class="header">
+        <div class="logo">ATX</div>
+        <h1>ATXxKEEM HUB</h1>
+        <p class="subtitle">ATXxKEEM HUB.</p>
+        <div class="user-chip" id="userChip" style="display:none;">
+          <span id="userChipName">user</span>
+          <button class="btn-link" id="logoutBtn">Logout</button>
+        </div>
+      </header>
+
+      <div class="menu-grid">
+        <button class="menu-btn" data-nav="premium">
+          <span class="menu-icon">★</span>
+          <span class="menu-label">Buy Premium</span>
+          <span class="menu-sub">Script no key</span>
+        </button>
+
+        <button class="menu-btn" data-nav="pastebin">
+          <span class="menu-icon">&lt;/&gt;</span>
+          <span class="menu-label">ATX Pastebin</span>
+          <span class="menu-sub">ATX Pastebin to make script</span>
+        </button>
+
+        <button class="menu-btn" data-nav="script">
+          <span class="menu-icon">⌘</span>
+          <span class="menu-label">Get Script</span>
+          <span class="menu-sub">Free script with key system</span>
+        </button>
+
+        <button class="menu-btn" data-nav="key">
+          <span class="menu-icon">⚿</span>
+          <span class="menu-label">Get Key</span>
+          <span class="menu-sub">12h access</span>
+        </button>
+
+        <button class="menu-btn admin-only" data-nav="admin" style="display:none;">
+          <span class="menu-icon">⚙</span>
+          <span class="menu-label">Admin Panel</span>
+          <span class="menu-sub">Control panel</span>
+        </button>
+      </div>
+
+      <footer class="footer">
+        <p>ATX | Telegram: @AntraxdevZ</p>
+      </footer>
+    </section>
+
+    <!-- ============ KEY ============ -->
+    <section id="view-key" class="view">
+      <button class="back-btn" data-nav="home">← Back</button>
+      <header class="header small">
+        <div class="logo">ATX</div>
+        <h1>Key Generation</h1>
+        <p class="subtitle">Complete all tasks to receive your key</p>
+      </header>
+
+      <div class="steps">
+        <div class="step" id="keyStep1">
+          <div class="step-header">
+            <span class="step-number">01</span>
+            <span class="step-title">Join Telegram Channel</span>
+            <span class="step-status" id="keyStatus1">Pending</span>
+          </div>
+          <div class="step-body">
+            <p class="step-desc">Join our Telegram channel to receive updates and support.</p>
+            <a href="{{ telegram_channel }}" target="_blank" rel="noopener" class="btn" id="keyJoinBtn">Join Channel</a>
+            <div class="cooldown" id="keyCool1" style="display:none;">
+              <div class="cooldown-bar"><div class="cooldown-fill" id="keyFill1"></div></div>
+              <span class="cooldown-text" id="keyCoolText1">Wait 30s...</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step disabled" id="keyStep2">
+          <div class="step-header">
+            <span class="step-number">02</span>
+            <span class="step-title">Verify You Are Human</span>
+            <span class="step-status" id="keyStatus2">Locked</span>
+          </div>
+          <div class="step-body">
+            <p class="step-desc">Answer the challenge below to prove you are human.</p>
+            <div class="captcha-box" id="keyCaptchaBox" style="display:none;">
+              <div class="captcha-question" id="keyCaptchaQuestion">Loading...</div>
+              <div class="captcha-input-row">
+                <input type="text" id="keyCaptchaInput" class="captcha-input" placeholder="Your answer" autocomplete="off" />
+                <button class="btn" id="keyCaptchaSubmit">Submit</button>
+              </div>
+              <div class="captcha-error" id="keyCaptchaError" style="display:none;"></div>
+              <button class="btn-link" id="keyNewChallenge">Get new challenge</button>
+            </div>
+            <button class="btn" id="keyStartVerify">Start Verification</button>
+            <div class="cooldown" id="keyCool2" style="display:none;">
+              <div class="cooldown-bar"><div class="cooldown-fill" id="keyFill2"></div></div>
+              <span class="cooldown-text" id="keyCoolText2">Wait 30s...</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step disabled" id="keyStep3">
+          <div class="step-header">
+            <span class="step-number">03</span>
+            <span class="step-title">Generate Your Key</span>
+            <span class="step-status" id="keyStatus3">Locked</span>
+          </div>
+          <div class="step-body">
+            <p class="step-desc">Click below to receive your key. Valid for 12 hours.</p>
+            <button class="btn" id="keyGenBtn" disabled>Generate Key</button>
+            <div class="key-display" id="keyDisplay" style="display:none;">
+              <div class="key-label">Your Key</div>
+              <div class="key-value" id="keyValue">ATX-XXXX-XXXX-XXXX</div>
+              <button class="btn-small" id="keyCopyBtn">Copy</button>
+              <div class="key-note">Expires in 12 hours</div>
+            </div>
+            <div class="error-msg" id="keyError" style="display:none;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SCRIPT ============ -->
+    <section id="view-script" class="view">
+      <button class="back-btn" data-nav="home">← Back</button>
+      <header class="header small">
+        <div class="logo">ATX</div>
+        <h1>Script Delivery</h1>
+        <p class="subtitle">Complete all tasks to receive your script</p>
+      </header>
+
+      <div class="steps">
+        <div class="step" id="scStep1">
+          <div class="step-header">
+            <span class="step-number">01</span>
+            <span class="step-title">Join Telegram Channel</span>
+            <span class="step-status" id="scStatus1">Pending</span>
+          </div>
+          <div class="step-body">
+            <p class="step-desc">Join our Telegram channel to receive updates and support.</p>
+            <a href="{{ telegram_channel }}" target="_blank" rel="noopener" class="btn" id="scJoinBtn">Join Channel</a>
+            <div class="cooldown" id="scCool1" style="display:none;">
+              <div class="cooldown-bar"><div class="cooldown-fill" id="scFill1"></div></div>
+              <span class="cooldown-text" id="scCoolText1">Wait 30s...</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step disabled" id="scStep2">
+          <div class="step-header">
+            <span class="step-number">02</span>
+            <span class="step-title">Verify You Are Human</span>
+            <span class="step-status" id="scStatus2">Locked</span>
+          </div>
+          <div class="step-body">
+            <p class="step-desc">Answer the challenge below to prove you are human.</p>
+            <div class="captcha-box" id="scCaptchaBox" style="display:none;">
+              <div class="captcha-question" id="scCaptchaQuestion">Loading...</div>
+              <div class="captcha-input-row">
+                <input type="text" id="scCaptchaInput" class="captcha-input" placeholder="Your answer" autocomplete="off" />
+                <button class="btn" id="scCaptchaSubmit">Submit</button>
+              </div>
+              <div class="captcha-error" id="scCaptchaError" style="display:none;"></div>
+              <button class="btn-link" id="scNewChallenge">Get new challenge</button>
+            </div>
+            <button class="btn" id="scStartVerify">Start Verification</button>
+            <div class="cooldown" id="scCool2" style="display:none;">
+              <div class="cooldown-bar"><div class="cooldown-fill" id="scFill2"></div></div>
+              <span class="cooldown-text" id="scCoolText2">Wait 30s...</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step disabled" id="scStep3">
+          <div class="step-header">
+            <span class="step-number">03</span>
+            <span class="step-title">Get Your Script</span>
+            <span class="step-status" id="scStatus3">Locked</span>
+          </div>
+          <div class="step-body">
+            <p class="step-desc">Click below to receive your loadstring. No expiration.</p>
+            <button class="btn" id="scGenBtn" disabled>Generate Script</button>
+            <div class="key-display" id="scDisplay" style="display:none;">
+              <div class="key-label">Loadstring</div>
+              <pre class="code-block" id="scPayload"></pre>
+              <button class="btn-small" id="scCopyBtn">Copy</button>
+            </div>
+            <div class="error-msg" id="scError" style="display:none;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ADMIN ============ -->
+    <section id="view-admin" class="view">
+      <button class="back-btn" data-nav="home">← Back</button>
+      <header class="header small">
+        <div class="logo">ATX</div>
+        <h1>Admin Panel</h1>
+        <p class="subtitle">Control the platform</p>
+      </header>
+
+      <div class="admin-card">
+        <div class="admin-section-title">Script Loadstring URL</div>
+        <p class="admin-desc">Ito yung URL na hinihila ng <code>game:HttpGet</code> para sa GET SCRIPT. Palitan mo dito at agad-agad magbabago ang lahat ng bagong ibibigay na loadstring.</p>
+
+        <input type="text" id="adminUrlInput" class="captcha-input" placeholder="https://pastebin.com/raw/xxxxx" />
+        <div class="admin-row">
+          <button class="btn" id="adminSaveBtn">Save</button>
+          <button class="btn-link" id="adminResetBtn">Reset to saved</button>
+        </div>
+
+        <div class="error-msg" id="adminError" style="display:none;"></div>
+        <div class="admin-success" id="adminSuccess" style="display:none;">Saved.</div>
+
+        <div class="admin-preview-label">Preview ng ibibigay na loadstring:</div>
+        <pre class="code-block" id="adminPreview">loadstring(game:HttpGet("..."))()</pre>
+
+        <div class="admin-meta" id="adminMeta"></div>
+      </div>
+    </section>
+
+    <!-- ============ PASTEBIN ============ -->
+    <section id="view-pastebin" class="view">
+      <button class="back-btn" data-nav="home">← Back</button>
+
+      <div id="pasteAuth" style="display:none;">
+        <header class="header small">
+          <div class="logo">ATX</div>
+          <h1 id="authTitle">Login</h1>
+          <p class="subtitle" id="authSub">Sign in to use ATX Pastebin</p>
+        </header>
+
+        <div class="auth-card">
+          <div class="auth-toggle">
+            <button class="auth-tab active" data-mode="login">Login</button>
+            <button class="auth-tab" data-mode="register">Register</button>
+          </div>
+
+          <input type="text" id="authUser" class="captcha-input" placeholder="Username" autocomplete="username" />
+          <input type="password" id="authPass" class="captcha-input" placeholder="Password" autocomplete="current-password" style="margin-top:10px;" />
+          <button class="btn" id="authSubmit" style="margin-top:16px; width:100%;">Login</button>
+          <div class="error-msg" id="authError" style="display:none;"></div>
+        </div>
+      </div>
+
+      <div id="pasteMain" style="display:none;">
+        <header class="header small">
+          <div class="logo">ATX</div>
+          <h1>ATX Pastebin</h1>
+          <p class="subtitle">Signed in as <span id="pasteUser">user</span></p>
+        </header>
+
+        <div class="paste-tabs">
+          <button class="paste-tab active" data-tab="new">New Paste</button>
+          <button class="paste-tab" data-tab="mine">My Pastes</button>
+          <button class="paste-tab" data-tab="recent">Recent</button>
+        </div>
+
+        <div class="paste-panel" id="pastePanelNew">
+          <input type="text" id="pasteTitle" class="captcha-input" placeholder="Title (optional)" maxlength="120" />
+          <textarea id="pasteContent" class="paste-textarea" placeholder="Paste your code or text here..." maxlength="100000"></textarea>
+          <div class="paste-row">
+            <select id="pasteSyntax" class="captcha-input" style="flex:0 0 160px;">
+              <option value="text">Plain text</option>
+              <option value="lua">Lua</option>
+              <option value="javascript">JavaScript</option>
+              <option value="python">Python</option>
+              <option value="html">HTML</option>
+              <option value="css">CSS</option>
+              <option value="json">JSON</option>
+              <option value="cpp">C++</option>
+              <option value="csharp">C#</option>
+              <option value="bash">Bash</option>
+            </select>
+            <button class="btn" id="pasteCreateBtn">Create Paste</button>
+          </div>
+          <div class="error-msg" id="pasteError" style="display:none;"></div>
+          <div class="key-display" id="pasteResult" style="display:none;">
+            <div class="key-label">Paste URL</div>
+            <div class="key-value" id="pasteResultUrl">/paste/xxxx</div>
+            <button class="btn-small" id="pasteResultCopy">Copy URL</button>
+            <button class="btn-small" id="pasteResultOpen" style="margin-left:6px;">Open</button>
+            <div class="key-label" style="margin-top:14px;">Raw URL</div>
+            <div class="key-value" id="pasteResultRawUrl">/raw/xxxx</div>
+            <button class="btn-small" id="pasteResultRawCopy">Copy Raw URL</button>
+          </div>
+        </div>
+
+        <div class="paste-panel" id="pastePanelMine" style="display:none;">
+          <div id="pasteMineList" class="paste-list"></div>
+        </div>
+
+        <div class="paste-panel" id="pastePanelRecent" style="display:none;">
+          <div id="pasteRecentList" class="paste-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PASTE VIEW ============ -->
+    <section id="view-paste-view" class="view">
+      <button class="back-btn" data-nav="pastebin">← Back</button>
+      <header class="header small">
+        <div class="logo">ATX</div>
+        <h1 id="pvTitle">Paste</h1>
+        <p class="subtitle" id="pvMeta">by anon • 0 views</p>
+      </header>
+      <div class="paste-view">
+        <div class="raw-url-box">
+          <span class="raw-url-label">RAW</span>
+          <code class="raw-url" id="pvRawUrl">/raw/xxxx</code>
+          <button class="btn-small" id="pvRawCopy">Copy URL</button>
+        </div>
+        <pre class="code-block" id="pvContent">Loading...</pre>
+        <div class="paste-view-actions">
+          <button class="btn-small" id="pvCopy">Copy</button>
+          <button class="btn-small" id="pvRaw">Open Raw</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // ========== VIEW ROUTER ==========
+    const views = document.querySelectorAll('.view');
+    function showView(id) {
+      views.forEach(v => v.classList.remove('active'));
+      document.getElementById('view-' + id)?.classList.add('active');
+      window.scrollTo(0, 0);
+    }
+    document.querySelectorAll('[data-nav]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.nav;
+        if (target === 'premium') {
+          window.open('{{ telegram_premium }}', '_blank', 'noopener');
+          return;
+        }
+        if (target === 'pastebin') {
+          handlePastebinNav();
+          return;
+        }
+        if (target === 'admin') {
+          if (!currentUser || !currentUser.is_admin) return;
+          showView('admin');
+          loadAdminPanel();
+          return;
+        }
+        showView(target);
+      });
+    });
+
+    // ========== AUTH STATE ==========
+    let currentUser = null;
+    async function loadMe() {
+      try {
+        const r = await fetch('/api/auth/me');
+        const d = await r.json();
+        currentUser = d.user;
+        updateUserChip();
+        updateAdminVisibility();
+      } catch (e) { currentUser = null; }
+    }
+    function updateUserChip() {
+      const chip = document.getElementById('userChip');
+      if (currentUser) {
+        chip.style.display = 'flex';
+        document.getElementById('userChipName').textContent =
+          currentUser.username + (currentUser.is_admin ? ' • admin' : '');
+      } else {
+        chip.style.display = 'none';
+      }
+    }
+    function updateAdminVisibility() {
+      const show = !!(currentUser && currentUser.is_admin);
+      document.querySelectorAll('.admin-only').forEach(el => {
+        el.style.display = show ? 'flex' : 'none';
+      });
+    }
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      currentUser = null;
+      updateUserChip();
+      updateAdminVisibility();
+      showView('home');
+    });
+    loadMe();
+
+    // ========== ADMIN PANEL ==========
+    let adminSavedUrl = '';
+    async function loadAdminPanel() {
+      const err = document.getElementById('adminError');
+      const ok = document.getElementById('adminSuccess');
+      err.style.display = 'none';
+      ok.style.display = 'none';
+      try {
+        const r = await fetch('/api/admin/script-url');
+        const d = await r.json();
+        if (!d.success) {
+          err.textContent = d.error || 'Error';
+          err.style.display = 'block';
+          return;
+        }
+        adminSavedUrl = d.url;
+        document.getElementById('adminUrlInput').value = d.url;
+        document.getElementById('adminPreview').textContent = d.payload_preview;
+        document.getElementById('adminMeta').textContent = 'Current saved URL: ' + d.url;
+      } catch (e) {
+        err.textContent = 'Network error';
+        err.style.display = 'block';
+      }
+    }
+    document.getElementById('adminSaveBtn').addEventListener('click', async () => {
+      const url = document.getElementById('adminUrlInput').value.trim();
+      const err = document.getElementById('adminError');
+      const ok = document.getElementById('adminSuccess');
+      err.style.display = 'none';
+      ok.style.display = 'none';
+      if (!url) {
+        err.textContent = 'URL required';
+        err.style.display = 'block';
+        return;
+      }
+      const btn = document.getElementById('adminSaveBtn');
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+      try {
+        const r = await fetch('/api/admin/script-url', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url }),
+        });
+        const d = await r.json();
+        if (!d.success) {
+          err.textContent = d.error || 'Error';
+          err.style.display = 'block';
+          return;
+        }
+        adminSavedUrl = d.url;
+        document.getElementById('adminPreview').textContent = d.payload_preview;
+        document.getElementById('adminMeta').textContent = 'Current saved URL: ' + d.url;
+        ok.style.display = 'block';
+        setTimeout(() => ok.style.display = 'none', 2500);
+      } catch (e) {
+        err.textContent = 'Network error';
+        err.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Save';
+      }
+    });
+    document.getElementById('adminResetBtn').addEventListener('click', () => {
+      document.getElementById('adminUrlInput').value = adminSavedUrl;
+      document.getElementById('adminError').style.display = 'none';
+      document.getElementById('adminSuccess').style.display = 'none';
+    });
+
+    // ========== AUTH UI ==========
+    let authMode = 'login';
+    document.querySelectorAll('.auth-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        authMode = tab.dataset.mode;
+        document.getElementById('authTitle').textContent = authMode === 'login' ? 'Login' : 'Register';
+        document.getElementById('authSub').textContent = authMode === 'login' ? 'Sign in to use ATX Pastebin' : 'Create an account for ATX Pastebin';
+        document.getElementById('authSubmit').textContent = authMode === 'login' ? 'Login' : 'Register';
+        document.getElementById('authError').style.display = 'none';
+      });
+    });
+
+    document.getElementById('authSubmit').addEventListener('click', async () => {
+      const username = document.getElementById('authUser').value.trim();
+      const password = document.getElementById('authPass').value;
+      const err = document.getElementById('authError');
+      err.style.display = 'none';
+
+      if (!username || !password) {
+        err.textContent = 'Fill in both fields';
+        err.style.display = 'block';
+        return;
+      }
+      const url = authMode === 'login' ? '/api/auth/login' : '/api/auth/register';
+      try {
+        const r = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password }),
+        });
+        const d = await r.json();
+        if (!d.success) {
+          err.textContent = d.error || 'Error';
+          err.style.display = 'block';
+          return;
+        }
+        currentUser = d.user;
+        updateUserChip();
+        updateAdminVisibility();
+        document.getElementById('authUser').value = '';
+        document.getElementById('authPass').value = '';
+        enterPastebin();
+      } catch (e) {
+        err.textContent = 'Network error';
+        err.style.display = 'block';
+      }
+    });
+
+    // ========== PASTEBIN ==========
+    function handlePastebinNav() {
+      showView('pastebin');
+      if (currentUser) enterPastebin();
+      else showPasteAuth();
+    }
+    function showPasteAuth() {
+      document.getElementById('pasteAuth').style.display = 'block';
+      document.getElementById('pasteMain').style.display = 'none';
+    }
+    function enterPastebin() {
+      document.getElementById('pasteAuth').style.display = 'none';
+      document.getElementById('pasteMain').style.display = 'block';
+      document.getElementById('pasteUser').textContent = currentUser.username;
+      switchPasteTab('new');
+    }
+    function switchPasteTab(name) {
+      document.querySelectorAll('.paste-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+      document.getElementById('pastePanelNew').style.display = name === 'new' ? 'block' : 'none';
+      document.getElementById('pastePanelMine').style.display = name === 'mine' ? 'block' : 'none';
+      document.getElementById('pastePanelRecent').style.display = name === 'recent' ? 'block' : 'none';
+      if (name === 'mine') loadMyPastes();
+      if (name === 'recent') loadRecentPastes();
+    }
+    document.querySelectorAll('.paste-tab').forEach(t => {
+      t.addEventListener('click', () => switchPasteTab(t.dataset.tab));
+    });
+
+    document.getElementById('pasteCreateBtn').addEventListener('click', async () => {
+      const content = document.getElementById('pasteContent').value;
+      const title = document.getElementById('pasteTitle').value.trim();
+      const syntax = document.getElementById('pasteSyntax').value;
+      const err = document.getElementById('pasteError');
+      err.style.display = 'none';
+      if (!content.trim()) {
+        err.textContent = 'Content required';
+        err.style.display = 'block';
+        return;
+      }
+      const btn = document.getElementById('pasteCreateBtn');
+      btn.disabled = true;
+      btn.textContent = 'Creating...';
+      try {
+        const r = await fetch('/api/paste/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content, title, syntax }),
+        });
+        const d = await r.json();
+        if (!d.success) {
+          err.textContent = d.error || 'Error';
+          err.style.display = 'block';
+          return;
+        }
+        document.getElementById('pasteContent').value = '';
+        document.getElementById('pasteTitle').value = '';
+        document.getElementById('pasteResult').style.display = 'block';
+        const url = location.origin + d.url;
+        const rawUrl = location.origin + d.raw_url;
+        document.getElementById('pasteResultUrl').textContent = url;
+        document.getElementById('pasteResultRawUrl').textContent = rawUrl;
+        document.getElementById('pasteResultCopy').onclick = () => {
+          navigator.clipboard.writeText(url);
+          document.getElementById('pasteResultCopy').textContent = 'Copied!';
+          setTimeout(() => document.getElementById('pasteResultCopy').textContent = 'Copy URL', 2000);
+        };
+        document.getElementById('pasteResultRawCopy').onclick = () => {
+          navigator.clipboard.writeText(rawUrl);
+          document.getElementById('pasteResultRawCopy').textContent = 'Copied!';
+          setTimeout(() => document.getElementById('pasteResultRawCopy').textContent = 'Copy Raw URL', 2000);
+        };
+        document.getElementById('pasteResultOpen').onclick = () => {
+          location.hash = '#paste/' + d.id;
+          openPasteView(d.id);
+        };
+      } catch (e) {
+        err.textContent = 'Network error';
+        err.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Create Paste';
+      }
+    });
+
+    async function loadMyPastes() {
+      const list = document.getElementById('pasteMineList');
+      list.innerHTML = '<div class="paste-empty">Loading...</div>';
+      try {
+        const r = await fetch('/api/paste/mine');
+        const d = await r.json();
+        if (!d.success) {
+          list.innerHTML = '<div class="paste-empty">Error loading</div>';
+          return;
+        }
+        if (!d.pastes.length) {
+          list.innerHTML = '<div class="paste-empty">No pastes yet.</div>';
+          return;
+        }
+        list.innerHTML = d.pastes.map(p => pasteItemHTML(p, true)).join('');
+        bindPasteItems(list);
+      } catch (e) {
+        list.innerHTML = '<div class="paste-empty">Network error</div>';
+      }
+    }
+
+    async function loadRecentPastes() {
+      const list = document.getElementById('pasteRecentList');
+      list.innerHTML = '<div class="paste-empty">Loading...</div>';
+      try {
+        const r = await fetch('/api/paste/recent');
+        const d = await r.json();
+        if (!d.success || !d.pastes.length) {
+          list.innerHTML = '<div class="paste-empty">No pastes yet.</div>';
+          return;
+        }
+        list.innerHTML = d.pastes.map(p => pasteItemHTML(p, false)).join('');
+        bindPasteItems(list);
+      } catch (e) {
+        list.innerHTML = '<div class="paste-empty">Network error</div>';
+      }
+    }
+
+    function pasteItemHTML(p, owned) {
+      const created = p.created ? new Date(p.created * 1000).toLocaleString() : '';
+      return `
+        <div class="paste-item" data-id="${p.id}">
+          <div class="paste-item-main">
+            <div class="paste-item-title">${escapeHtml(p.title || '(untitled)')}</div>
+            <div class="paste-item-meta">by ${escapeHtml(p.username || 'anon')} • ${p.views || 0} views • ${created}</div>
+          </div>
+          <div class="paste-item-actions">
+            <button class="btn-small paste-open">Open</button>
+            <button class="btn-small paste-raw">Raw</button>
+            ${owned ? '<button class="btn-small paste-del" style="background:#2a0a0a;color:#f55;">Delete</button>' : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    function bindPasteItems(root) {
+      root.querySelectorAll('.paste-item').forEach(item => {
+        const id = item.dataset.id;
+        item.querySelector('.paste-open').onclick = () => openPasteView(id);
+        item.querySelector('.paste-raw').onclick = () => window.open('/raw/' + id, '_blank');
+        const delBtn = item.querySelector('.paste-del');
+        if (delBtn) delBtn.onclick = async () => {
+          if (!confirm('Delete this paste?')) return;
+          await fetch('/api/paste/delete/' + id, { method: 'POST' });
+          loadMyPastes();
+        };
+      });
+    }
+
+    async function openPasteView(pid) {
+      showView('paste-view');
+      document.getElementById('pvTitle').textContent = 'Loading...';
+      document.getElementById('pvMeta').textContent = '';
+      document.getElementById('pvContent').textContent = 'Loading...';
+      document.getElementById('pvRawUrl').textContent = location.origin + '/raw/' + pid;
+      try {
+        const r = await fetch('/api/paste/get/' + pid);
+        const d = await r.json();
+        if (!d.success) {
+          document.getElementById('pvTitle').textContent = 'Not found';
+          document.getElementById('pvContent').textContent = d.error || 'Error';
+          return;
+        }
+        document.getElementById('pvTitle').textContent = d.title || '(untitled)';
+        const created = d.created ? new Date(d.created * 1000).toLocaleString() : '';
+        document.getElementById('pvMeta').textContent = `by ${d.username} • ${d.views} views • ${created}`;
+        document.getElementById('pvContent').textContent = d.content;
+        document.getElementById('pvCopy').onclick = () => {
+          navigator.clipboard.writeText(d.content);
+          document.getElementById('pvCopy').textContent = 'Copied!';
+          setTimeout(() => document.getElementById('pvCopy').textContent = 'Copy', 2000);
+        };
+        document.getElementById('pvRaw').onclick = () => window.open('/raw/' + pid, '_blank');
+        document.getElementById('pvRawCopy').onclick = () => {
+          navigator.clipboard.writeText(location.origin + '/raw/' + pid);
+          document.getElementById('pvRawCopy').textContent = 'Copied!';
+          setTimeout(() => document.getElementById('pvRawCopy').textContent = 'Copy URL', 2000);
+        };
+      } catch (e) {
+        document.getElementById('pvContent').textContent = 'Network error';
+      }
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    // ========== KEY FLOW ==========
+    (function initKeyFlow() {
+      const $ = id => document.getElementById(id);
+
+      $('keyJoinBtn').addEventListener('click', function () {
+        this.style.display = 'none';
+        $('keyCool1').style.display = 'block';
+        $('keyStatus1').textContent = 'Waiting...';
+        $('keyStatus1').className = 'step-status waiting';
+        runCooldown(30000,
+          pct => $('keyFill1').style.width = pct + '%',
+          sec => $('keyCoolText1').textContent = 'Wait ' + sec + 's...',
+          () => {
+            $('keyStatus1').textContent = 'Completed';
+            $('keyStatus1').className = 'step-status done';
+            $('keyStep2').classList.remove('disabled');
+            $('keyStatus2').textContent = 'Ready';
+            $('keyStatus2').className = 'step-status ready';
+          });
+      });
+
+      $('keyStartVerify').addEventListener('click', async () => {
+        $('keyStartVerify').style.display = 'none';
+        $('keyCaptchaBox').style.display = 'block';
+        await loadChallenge('keyCaptchaQuestion', 'keyCaptchaInput', 'keyCaptchaError');
+      });
+      $('keyNewChallenge').addEventListener('click', () =>
+        loadChallenge('keyCaptchaQuestion', 'keyCaptchaInput', 'keyCaptchaError'));
+
+      $('keyCaptchaSubmit').addEventListener('click', async () => {
+        await submitChallenge('keyCaptchaInput', 'keyCaptchaSubmit', 'keyCaptchaError', 'keyCaptchaQuestion',
+          () => {
+            $('keyCaptchaBox').style.display = 'none';
+            $('keyCool2').style.display = 'block';
+            $('keyStatus2').textContent = 'Verifying...';
+            $('keyStatus2').className = 'step-status waiting';
+            runCooldown(30000,
+              pct => $('keyFill2').style.width = pct + '%',
+              sec => $('keyCoolText2').textContent = 'Wait ' + sec + 's...',
+              () => {
+                $('keyStatus2').textContent = 'Verified';
+                $('keyStatus2').className = 'step-status done';
+                $('keyStep3').classList.remove('disabled');
+                $('keyStatus3').textContent = 'Ready';
+                $('keyStatus3').className = 'step-status ready';
+                $('keyGenBtn').disabled = false;
+              });
+          });
+      });
+      $('keyCaptchaInput').addEventListener('keydown', e => { if (e.key === 'Enter') $('keyCaptchaSubmit').click(); });
+
+      $('keyGenBtn').addEventListener('click', async function () {
+        const btn = this;
+        btn.disabled = true;
+        btn.textContent = 'Generating...';
+        $('keyError').style.display = 'none';
+        try {
+          const r = await fetch('/api/generate-key', { method: 'POST' });
+          const d = await r.json();
+          if (!d.success) {
+            $('keyError').textContent = d.error || 'Error';
+            $('keyError').style.display = 'block';
+            btn.textContent = 'Generate Key';
+            btn.disabled = false;
+            return;
+          }
+          $('keyValue').textContent = d.key;
+          $('keyDisplay').style.display = 'block';
+          $('keyStatus3').textContent = 'Complete';
+          $('keyStatus3').className = 'step-status done';
+          btn.style.display = 'none';
+        } catch (e) {
+          $('keyError').textContent = 'Network error';
+          $('keyError').style.display = 'block';
+          btn.textContent = 'Generate Key';
+          btn.disabled = false;
+        }
+      });
+
+      $('keyCopyBtn').addEventListener('click', function () {
+        navigator.clipboard.writeText($('keyValue').textContent).then(() => {
+          this.textContent = 'Copied!';
+          setTimeout(() => this.textContent = 'Copy', 2000);
+        });
+      });
+    })();
+
+    // ========== SCRIPT FLOW ==========
+    (function initScriptFlow() {
+      const $ = id => document.getElementById(id);
+
+      $('scJoinBtn').addEventListener('click', function () {
+        this.style.display = 'none';
+        $('scCool1').style.display = 'block';
+        $('scStatus1').textContent = 'Waiting...';
+        $('scStatus1').className = 'step-status waiting';
+        runCooldown(30000,
+          pct => $('scFill1').style.width = pct + '%',
+          sec => $('scCoolText1').textContent = 'Wait ' + sec + 's...',
+          () => {
+            $('scStatus1').textContent = 'Completed';
+            $('scStatus1').className = 'step-status done';
+            $('scStep2').classList.remove('disabled');
+            $('scStatus2').textContent = 'Ready';
+            $('scStatus2').className = 'step-status ready';
+          });
+      });
+
+      $('scStartVerify').addEventListener('click', async () => {
+        $('scStartVerify').style.display = 'none';
+        $('scCaptchaBox').style.display = 'block';
+        await loadChallenge('scCaptchaQuestion', 'scCaptchaInput', 'scCaptchaError');
+      });
+      $('scNewChallenge').addEventListener('click', () =>
+        loadChallenge('scCaptchaQuestion', 'scCaptchaInput', 'scCaptchaError'));
+
+      $('scCaptchaSubmit').addEventListener('click', async () => {
+        await submitChallenge('scCaptchaInput', 'scCaptchaSubmit', 'scCaptchaError', 'scCaptchaQuestion',
+          () => {
+            $('scCaptchaBox').style.display = 'none';
+            $('scCool2').style.display = 'block';
+            $('scStatus2').textContent = 'Verifying...';
+            $('scStatus2').className = 'step-status waiting';
+            runCooldown(30000,
+              pct => $('scFill2').style.width = pct + '%',
+              sec => $('scCoolText2').textContent = 'Wait ' + sec + 's...',
+              () => {
+                $('scStatus2').textContent = 'Verified';
+                $('scStatus2').className = 'step-status done';
+                $('scStep3').classList.remove('disabled');
+                $('scStatus3').textContent = 'Ready';
+                $('scStatus3').className = 'step-status ready';
+                $('scGenBtn').disabled = false;
+              });
+          });
+      });
+      $('scCaptchaInput').addEventListener('keydown', e => { if (e.key === 'Enter') $('scCaptchaSubmit').click(); });
+
+      $('scGenBtn').addEventListener('click', async function () {
+        const btn = this;
+        btn.disabled = true;
+        btn.textContent = 'Generating...';
+        $('scError').style.display = 'none';
+        try {
+          const r = await fetch('/api/generate-script', { method: 'POST' });
+          const d = await r.json();
+          if (!d.success) {
+            $('scError').textContent = d.error || 'Error';
+            $('scError').style.display = 'block';
+            btn.textContent = 'Generate Script';
+            btn.disabled = false;
+            return;
+          }
+          $('scPayload').textContent = d.payload;
+          $('scDisplay').style.display = 'block';
+          $('scStatus3').textContent = 'Complete';
+          $('scStatus3').className = 'step-status done';
+          btn.style.display = 'none';
+        } catch (e) {
+          $('scError').textContent = 'Network error';
+          $('scError').style.display = 'block';
+          btn.textContent = 'Generate Script';
+          btn.disabled = false;
+        }
+      });
+
+      $('scCopyBtn').addEventListener('click', function () {
+        navigator.clipboard.writeText($('scPayload').textContent).then(() => {
+          this.textContent = 'Copied!';
+          setTimeout(() => this.textContent = 'Copy', 2000);
+        });
+      });
+    })();
+
+    // ========== SHARED HELPERS ==========
+    function runCooldown(duration, onTick, onSec, onDone) {
+      const start = Date.now();
+      const timer = setInterval(() => {
+        const elapsed = Date.now() - start;
+        const remaining = Math.max(0, duration - elapsed);
+        const pct = (elapsed / duration) * 100;
+        onTick(Math.min(100, pct));
+        onSec(Math.ceil(remaining / 1000));
+        if (elapsed >= duration) {
+          clearInterval(timer);
+          onDone();
+        }
+      }, 100);
+    }
+
+    async function loadChallenge(qId, iId, eId) {
+      const q = document.getElementById(qId);
+      const i = document.getElementById(iId);
+      const e = document.getElementById(eId);
+      q.textContent = 'Loading...';
+      e.style.display = 'none';
+      i.value = '';
+      i.disabled = false;
+      try {
+        const r = await fetch('/api/get-challenge', { method: 'POST' });
+        const d = await r.json();
+        if (!d.success) { q.textContent = 'Error loading'; return; }
+        q.textContent = d.question;
+        i.focus();
+      } catch (err) {
+        q.textContent = 'Network error';
+      }
+    }
+
+    async function submitChallenge(iId, bId, eId, qId, onSuccess) {
+      const input = document.getElementById(iId);
+      const btn = document.getElementById(bId);
+      const err = document.getElementById(eId);
+      const answer = input.value.trim();
+      if (!answer) {
+        err.textContent = 'Enter your answer';
+        err.style.display = 'block';
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = 'Checking...';
+      err.style.display = 'none';
+      try {
+        const r = await fetch('/api/verify-human', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ answer }),
+        });
+        const d = await r.json();
+        if (!d.success) {
+          err.textContent = d.error || 'Wrong answer';
+          err.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Submit';
+          setTimeout(() => loadChallenge(qId, iId, eId), 800);
+          return;
+        }
+        onSuccess();
+      } catch (e) {
+        err.textContent = 'Network error';
+        err.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Submit';
+      }
+    }
+
+    // Handle hash for direct paste links: /#paste/xxxx
+    function checkHash() {
+      const m = location.hash.match(/^#paste\/(.+)$/);
+      if (m) openPasteView(m[1]);
+    }
+    window.addEventListener('hashchange', checkHash);
+    checkHash();
+  </script>
+</body>
+</html>
